@@ -188,9 +188,8 @@ class SimulationThread implements Runnable{
       if(s.h_avatar.getY() <= 4.5){
         // ==== AIR ====
         s.h_avatar.setDamping(0);
-        // fEE.x = 200000.0;
+        
         s.updateCouplingForce();
-        // fEE.set(-s.getVirtualCouplingForceX(), s.getVirtualCouplingForceY());
         fEE.div(100000); //dynes to newtons
 
         fEE.x = -s.h_avatar.getVelocityX()/70;
@@ -198,8 +197,9 @@ class SimulationThread implements Runnable{
 
       }else{
         // ==== WATER ====
+        
+        // Compute "depth" based damping.
         float damping = 800 + s.h_avatar.getY()*15.0 + constrain((-s.h_avatar.getY() + 5)*150, 0, 99999);
-        // println(damping);
         s.h_avatar.setDamping(damping);
         s.updateCouplingForce();
         fEE.set(-s.getVirtualCouplingForceX(), s.getVirtualCouplingForceY());
@@ -210,20 +210,23 @@ class SimulationThread implements Runnable{
       // ==== EARTH ====
       s.h_avatar.setDamping(0);
       s.updateCouplingForce();
-      // fEE.set(-s.getVirtualCouplingForceX(), s.getVirtualCouplingForceY());
       fEE.div(100000); //dynes to newtonss
 
+
+      // If the magnitude of movement is small enough, ignore it
       float magnitude = sqrt(pow(s.h_avatar.getVelocityX(), 2) + pow(s.h_avatar.getVelocityY(), 2));
       if(magnitude < 0.1){
         magnitude = 0;
       }
       
+      // scalar for the haptic effect
       float multiplier = 20;
       println(magnitude/multiplier * random(-1, 1));
 
       float xMag = random(-1, 1);
       float yMag = random(-1, 1);
       
+      // compute the forces
       float xForce = magnitude * xMag/(sqrt(pow(xMag, 2) + pow(yMag, 2))) / multiplier;
       float yForce = magnitude * yMag/(sqrt(pow(xMag, 2) + pow(yMag, 2))) / multiplier;
       
