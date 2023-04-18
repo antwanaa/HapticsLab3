@@ -1,4 +1,4 @@
-/* library imports *****************************************************************************************************/ 
+ /* library imports *****************************************************************************************************/ 
 import processing.serial.*;
 import static java.util.concurrent.TimeUnit.*;
 import java.util.concurrent.*;
@@ -48,7 +48,7 @@ PVector           fEE                                 = new PVector(0, 0);
 /* World boundaries in centimeters */
 FWorld            world;
 float             worldWidth                          = 25.0;  
-float             worldHeight                         = 10.0; 
+float             worldHeight                         = 15.0; 
 
 float             edgeTopLeftX                        = 0.0; 
 float             edgeTopLeftY                        = 0.0; 
@@ -79,7 +79,7 @@ void setup(){
   /* put setup code here, run once: */
   
   /* screen size definition */
-  size(1000, 400);
+  size(1000, 600);
   
   /* device setup */
   
@@ -128,7 +128,7 @@ void setup(){
   world.setEdgesFriction(0.5);
   
   
-  world.draw();
+  // world.draw();
   
   
   /* setup framerate speed */
@@ -158,7 +158,7 @@ void draw(){
   /* put graphical code here, runs repeatedly at defined framerate in setup, else default at 60fps: */
   if(renderingForce == false){
     background(255);
-    world.draw();
+    // world.draw();
   }
 }
 /* end draw section ****************************************************************************************************/
@@ -185,7 +185,7 @@ class SimulationThread implements Runnable{
     s.setToolPosition(edgeTopLeftX+worldWidth/2-(posEE).x, edgeTopLeftY+(posEE).y-7); 
     
     if(simulation == 0){
-      if(s.h_avatar.getY() <= 4.5){
+      if(s.h_avatar.getY() <= 5.5){
         // ==== AIR ====
         s.h_avatar.setDamping(0);
         
@@ -199,7 +199,7 @@ class SimulationThread implements Runnable{
         // ==== WATER ====
         
         // Compute "depth" based damping.
-        float damping = 800 + s.h_avatar.getY()*15.0 + constrain((-s.h_avatar.getY() + 5)*150, 0, 99999);
+        float damping = 800 + s.h_avatar.getY()*15.0 + constrain((-s.h_avatar.getY() + 6)*150, 0, 99999);
         s.h_avatar.setDamping(damping);
         s.updateCouplingForce();
         fEE.set(-s.getVirtualCouplingForceX(), s.getVirtualCouplingForceY());
